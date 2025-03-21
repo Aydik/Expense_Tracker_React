@@ -1,11 +1,11 @@
 import React from 'react'
 import {ExpenseList} from "../ExpenseList";
-import {ExpenseForm} from "../ExpenseForm";
+import {ExpensesStats} from "../ExpensesStats";
 
 export const ExpenseTracker: React.FC = () => {
     return (
         <>
-            <ExpenseForm/>
+            <ExpensesStats/>
             <ExpenseList/>
         </>
     )

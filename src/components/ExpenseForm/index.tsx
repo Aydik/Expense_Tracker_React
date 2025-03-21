@@ -1,61 +1,43 @@
-import React, {useState} from 'react'
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import React, {useState} from "react";
+import {Box, Typography} from "@mui/material";
 import {useDispatch} from "react-redux";
-import {AppDispatch, addExpense} from '../../store';
+import {CustomInput} from "../ui/CustomInput";
+import {CustomButton} from "../ui/CustomButton";
+import {AppDispatch} from "../../store";
+import {addExpense} from "../../store/expenses.ts";
+import {ExpenseFormProps} from "./index.interfaces.ts";
 
-export const ExpenseForm: React.FC = () => {
-
-    const [name, setName] = useState<string>("")
-    const [amount, setAmount] = useState<number>(0)
+export const ExpenseForm: React.FC<ExpenseFormProps> = ({onSubmit}: ExpenseFormProps) => {
+    const [name, setName] = useState<string>("");
+    const [amount, setAmount] = useState<string>("");
 
     const dispatch: AppDispatch = useDispatch();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!name || !amount) return;
 
-        dispatch(addExpense({
-            id: Date.now(),
-            name: name,
-            amount: amount,
-        }));
-
+        dispatch(addExpense({id: Date.now(), name, amount: parseInt(amount)}));
         setName("");
-        setAmount(0);
-    }
+        setAmount("");
+        if (onSubmit != undefined) onSubmit();
+    };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="name">Имя:</label>
-                <TextField type="text"
-                           name="name"
-                           placeholder="Иван Иванов"
-                           required
-                           value={name}
-                           onChange={(e) =>
-                               setName(e.target.value)}
-                />
-
-                <label htmlFor="amount">Сумма:</label>
-                <TextField type="number"
-                           name="amount"
-                           placeholder="0"
-                           required
-                           value={amount}
-                           onChange={(e) => {
-                               if (e.target.value === "") {
-                                   setAmount(0)
-                               } else {
-                                   const newAmount = parseInt(e.target.value);
-                                   if (!Number.isNaN(Number(newAmount))) {
-                                       setAmount(newAmount)
-                                   }
-                               }
-                           }}/>
-
-                <Button color="primary" type="submit">Создать</Button>
-            </form>
-        </div>
-    )
-}
+        <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+                maxWidth: 600,
+                boxSizing: "border-box",
+            }}
+        >
+            <Typography variant="h5" fontWeight="bold" textAlign="center" gutterBottom>
+                Добавить расход
+            </Typography>
+            <CustomInput label="Название расхода" value={name} onChange={setName} type="text"/>
+            <CustomInput label="Сумма" value={amount} onChange={setAmount} type="number"/>
+            <CustomButton label="Добавить"/>
+        </Box>
+    );
+};
