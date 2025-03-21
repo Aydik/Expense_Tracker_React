@@ -7,7 +7,7 @@ import {Box} from "@mui/material";
 import {SelectBox} from "../ui/SelectBox";
 import {ReverseMode, SortMode, sortOptions} from "./index.interface.ts";
 import {ReverseButton} from "../ui/ReverseButton";
-import {useSortedExpenses} from "./useSortedExpenses.ts";
+import {useFilteredExpenses} from "../../hooks/useFilteredExpenses.ts";
 import {LoadingComponent} from "../ui/LodingComponent"; // Импортируем хук
 
 export const ExpenseList: React.FC = () => {
@@ -21,7 +21,7 @@ export const ExpenseList: React.FC = () => {
         else setReverseMode(null);
     }, [sortMode]);
 
-    const {sortedExpenses, loading} = useSortedExpenses(expenses, sortMode, reverseMode);
+    const {filteredExpenses, loading} = useFilteredExpenses(expenses, sortMode, reverseMode);
 
     return (
         <Box sx={{width: "90vw", margin: "0 auto", boxSizing: "border-box", padding: 2}}>
@@ -36,7 +36,7 @@ export const ExpenseList: React.FC = () => {
                     <LoadingComponent/>
                 ) : (
                     <ul>
-                        {sortedExpenses.map((expense: IExpense) => (
+                        {filteredExpenses.map((expense: IExpense) => (
                             <li style={{listStyle: "none"}} key={expense.id}>
                                 <Expense expense={expense}/>
                             </li>

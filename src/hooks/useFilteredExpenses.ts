@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import {IExpense} from "../Expense/index.interfaces.ts";
-import {ReverseMode, SortMode} from "./index.interface.ts";
+import {IExpense} from "../components/Expense/index.interfaces.ts";
+import {ReverseMode, SortMode} from "../components/ExpenseList/index.interface.ts";
 
-export const useSortedExpenses = (expenses: IExpense[], sortMode: SortMode, reverseMode: ReverseMode) => {
-    const [sortedExpenses, setSortedExpenses] = useState<IExpense[]>([]);
+export const useFilteredExpenses = (expenses: IExpense[], sortMode: SortMode, reverseMode: ReverseMode) => {
+    const [filteredExpenses, setFilteredExpenses] = useState<IExpense[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export const useSortedExpenses = (expenses: IExpense[], sortMode: SortMode, reve
             if (reverseMode) sorted.reverse();
 
             setTimeout(() => {
-                setSortedExpenses(sorted);
+                setFilteredExpenses(sorted);
                 setLoading(false);
             }, Math.random() * 500);
         };
@@ -36,5 +36,5 @@ export const useSortedExpenses = (expenses: IExpense[], sortMode: SortMode, reve
         sortExpenses();
     }, [sortMode, reverseMode, expenses]);
 
-    return {sortedExpenses, loading};
+    return {filteredExpenses, loading};
 };
